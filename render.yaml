@@ -1,0 +1,25 @@
+# =============================================================================
+#  render.yaml  —  Render Blueprint for The Realtor's AIME Community OS
+# =============================================================================
+#  This is a pure static site (HTML/CSS/JS, no build step, no secrets).
+#  When this repo is connected to Render as a Blueprint, this file configures
+#  a FREE Static Site automatically — nothing to fill in by hand.
+#
+#  To deploy: Render Dashboard -> New + -> Blueprint -> pick this repo -> Apply.
+#  Render gives you a live https://aime-community.onrender.com-style URL.
+#  Free static sites have NO cold starts.
+# =============================================================================
+services:
+  - type: web
+    name: aime-community
+    runtime: static
+    # No build needed — the files are already the site.
+    buildCommand: "echo 'static site — nothing to build'"
+    # Serve everything from the repo root (index.html lives here).
+    staticPublishPath: .
+    autoDeploy: true
+    # Friendly headers; optional.
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN

@@ -1,0 +1,14 @@
+# Editor / OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local tooling (not needed to serve the site)
+.claude/
+
+# Dependencies (this site has none, but just in case)
+node_modules/
+
+# Env files — never commit secrets (this static POC has none)
+.env
+.env.*
