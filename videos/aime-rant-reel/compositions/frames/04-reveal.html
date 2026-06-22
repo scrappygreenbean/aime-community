@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<template>
+  <style>
+    .f4-root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background: #050505;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Ambient radial glow behind the wordmark */
+    .f4-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 900px;
+      height: 900px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(212,175,55,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .f4-wordmark-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .f4-wordmark {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 180px;
+      line-height: 1;
+      background: linear-gradient(135deg, #F1D18A 0%, #D4AF37 45%, #B8932E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: scale(0.6);
+      letter-spacing: -2px;
+      /* box-shadow on wrapper, not on text */
+    }
+
+    .f4-wordmark-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 200px;
+      background: transparent;
+      box-shadow: 0 0 0px rgba(212, 175, 55, 0);
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(12px);
+    }
+
+    .f4-sub-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #A89F8C;
+      opacity: 0;
+      transform: translateY(20px);
+      margin-bottom: 52px;
+      text-align: center;
+    }
+
+    .f4-divider {
+      width: 0%;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent 0%, #D4AF37 30%, #F1D18A 50%, #D4AF37 70%, transparent 100%);
+      margin-bottom: 48px;
+      border-radius: 2px;
+      max-width: 700px;
+      align-self: center;
+    }
+
+    .f4-tagline {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 32px;
+      line-height: 1.4;
+      color: #ECE7DA;
+      opacity: 0;
+      transform: translateY(20px);
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    /* flex column wrapper for divider + tagline sizing */
+    .f4-lower {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 0 120px;
+      box-sizing: border-box;
+    }
+
+    .f4-divider {
+      width: 0%;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent 0%, #D4AF37 30%, #F1D18A 50%, #D4AF37 70%, transparent 100%);
+      margin-bottom: 48px;
+      border-radius: 2px;
+      min-width: 0;
+    }
+  </style>
+  <div class="f4-root" data-composition-id="04-reveal" data-width="1080" data-height="1920">
+    <div class="f4-bg-glow"></div>
+    <div class="f4-wordmark-wrap">
+      <div class="f4-wordmark-glow"></div>
+      <div class="f4-wordmark">AIME</div>
+    </div>
+    <div class="f4-sub-label">Artificial Intelligence + Me</div>
+    <div class="f4-lower">
+      <div class="f4-divider"></div>
+      <div class="f4-tagline">Your edge. Not another course.</div>
+    </div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    // t=0: bg glow fades in softly
+    tl.to(".f4-bg-glow", {
+      opacity: 1,
+      duration: 0.8,
+      ease: "power2.out"
+    }, 0);
+
+    // t=0.1: "AIME" wordmark scales from 0.6→1 (power4.out, 0.8s)
+    tl.to(".f4-wordmark", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      ease: "power4.out"
+    }, 0.1);
+
+    // t=0.1: gold glow erupts from nothing
+    tl.to(".f4-wordmark-glow", {
+      boxShadow: "0 0 60px rgba(212,175,55,0.6)",
+      duration: 0.8,
+      ease: "power3.out"
+    }, 0.1);
+
+    // t=0.7: sub-label fades up
+    tl.to(".f4-sub-label", {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "power3.out"
+    }, 0.7);
+
+    // t=0.9: divider draws
+    tl.to(".f4-divider", {
+      width: "100%",
+      duration: 0.4,
+      ease: "power3.out"
+    }, 0.9);
+
+    // t=1.2: tagline fades up
+    tl.to(".f4-tagline", {
+      opacity: 1,
+      y: 0,
+      duration: 0.5,
+      ease: "power3.out"
+    }, 1.2);
+
+    // t=1.5–3.0: AIME wordmark slow breathe (scale 1→1.03)
+    tl.to(".f4-wordmark", {
+      scale: 1.03,
+      duration: 0.75,
+      ease: "power1.inOut",
+      yoyo: true,
+      repeat: -1
+    }, 1.5);
+
+    // Gold glow pulses 60px→80px→60px on wordmark-glow
+    tl.to(".f4-wordmark-glow", {
+      boxShadow: "0 0 80px rgba(212,175,55,0.85)",
+      duration: 0.75,
+      ease: "power1.inOut",
+      yoyo: true,
+      repeat: -1
+    }, 1.5);
+
+    // bg ambient glow breathes too
+    tl.to(".f4-bg-glow", {
+      opacity: 0.6,
+      duration: 1.0,
+      ease: "power1.inOut",
+      yoyo: true,
+      repeat: -1
+    }, 1.6);
+
+    // Root slow scale drift
+    tl.to(".f4-root", {
+      scale: 1.015,
+      duration: 1.5,
+      ease: "power1.inOut"
+    }, 1.5);
+
+    window.__timelines["04-reveal"] = tl;
+  </script>
+</template>
+</body>
+</html>
