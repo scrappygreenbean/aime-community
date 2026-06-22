@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AIME — Video Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050505;
+    --gold: #D4AF37;
+    --champagne: #F1D18A;
+    --glow: #FFD76A;
+    --text: #ECE7DA;
+    --muted: #A89F8C;
+    --panel: #100D08;
+    --hairline: rgba(212,175,55,0.2);
+    --gold-grad: linear-gradient(135deg,#F1D18A 0%,#D4AF37 45%,#B8932E 100%);
+    --sans: 'Montserrat', sans-serif;
+    --serif: 'Playfair Display', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px 100px;
+    line-height: 1.6;
+  }
+
+  /* Ambient glow */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(800px 500px at 80% -10%, rgba(212,175,55,0.09), transparent 60%),
+      radial-gradient(600px 400px at -5% 20%, rgba(241,209,138,0.05), transparent 55%);
+  }
+
+  .wrap { position: relative; z-index: 1; width: 100%; max-width: 680px; }
+
+  /* ── Header ── */
+  header { text-align: center; margin-bottom: 56px; }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 52px;
+    font-weight: 900;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 6px;
+    margin-bottom: 6px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .tagline {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--hairline);
+    border-radius: 20px;
+    padding: 36px 40px;
+    margin-bottom: 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 18px;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: rgba(212,175,55,0.6); }
+  textarea::placeholder { color: var(--muted); }
+
+  .row { display: flex; gap: 16px; margin-top: 20px; }
+
+  select {
+    flex: 1;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(212,175,55,0.25);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 14px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  select:focus { border-color: rgba(212,175,55,0.6); }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: var(--gold-grad);
+    color: #000;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 14px;
+    padding: 18px 24px;
+    margin-top: 24px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    box-shadow: 0 0 40px rgba(212,175,55,0.3);
+  }
+  .btn-primary:hover  { opacity: 0.9; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── Status ── */
+  #status {
+    min-height: 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-top: 16px;
+    transition: color 0.3s;
+  }
+  #status.error { color: #FF8080; }
+  #status.success { color: #7EEEA4; }
+
+  /* ── Spinner ── */
+  .spinner {
+    display: none;
+    width: 20px; height: 20px;
+    border: 2px solid rgba(212,175,55,0.25);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 12px;
+  }
+  .spinner.show { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Video result ── */
+  #result { display: none; }
+  #result.show { display: block; }
+
+  .result-header {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  video {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--hairline);
+    background: #000;
+    max-height: 480px;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .btn-secondary {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    color: var(--champagne);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(212,175,55,0.5);
+    background: rgba(212,175,55,0.05);
+  }
+
+  /* ── History ── */
+  #history { margin-top: 32px; }
+  .history-title {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(212,175,55,0.1);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .history-item:hover { background: rgba(212,175,55,0.05); }
+  .history-item .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .history-item .label { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+  .history-item .time { font-size: 11px; color: var(--muted); }
+
+  /* ── Footer ── */
+  footer {
+    position: relative; z-index: 1;
+    margin-top: 60px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(212,175,55,0.25);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="logo">AIME</div>
+    <div class="logo-sub">Artificial Intelligence + Me</div>
+    <p class="tagline">Type a topic. Get a video. No courses required.</p>
+  </header>
+
+  <!-- Input card -->
+  <div class="card">
+    <label for="prompt">What's the video about?</label>
+    <textarea id="prompt" placeholder="e.g. Show realtors how AIME writes their listing descriptions in 6 seconds" maxlength="500"></textarea>
+
+    <div class="row">
+      <div style="flex:1">
+        <label for="duration" style="margin-bottom:6px">Duration</label>
+        <select id="duration">
+          <option value="15">15 seconds</option>
+          <option value="30" selected>30 seconds</option>
+          <option value="45">45 seconds</option>
+          <option value="60">60 seconds</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <label for="aspect" style="margin-bottom:6px">Format</label>
+        <select id="aspect">
+          <option value="9:16" selected>9:16 — Vertical (Reels)</option>
+          <option value="16:9">16:9 — Landscape (YouTube)</option>
+          <option value="1:1">1:1 — Square (Feed)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="createBtn" onclick="createVideo()">Create Video</button>
+  </div>
+
+  <!-- Status / spinner -->
+  <div class="spinner" id="spinner"></div>
+  <div id="status"></div>
+
+  <!-- Result -->
+  <div class="card" id="result">
+    <div class="result-header">Your Video is Ready</div>
+    <video id="videoPlayer" controls playsinline></video>
+    <div class="result-actions">
+      <a class="btn-secondary" id="downloadBtn" download="aime-video.mp4">Download MP4</a>
+      <button class="btn-secondary" onclick="resetForm()">Make Another</button>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div id="history"></div>
+</div>
+
+<footer>gotaime.com &nbsp;·&nbsp; powered by AIME</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

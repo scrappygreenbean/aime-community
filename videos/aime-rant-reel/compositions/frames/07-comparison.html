@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"/></head>
+<body>
+<template>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@600;700;800;900&display=swap');
+
+    .f7-root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background: #050505;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .f7-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 35% at 20% 35%, rgba(255,69,69,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 35% at 80% 65%, rgba(212,175,55,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .f7-inner {
+      position: relative;
+      width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .f7-header {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #A89F8C;
+      text-align: center;
+      opacity: 0;
+    }
+
+    /* BAD card */
+    .f7-bad-card {
+      width: 100%;
+      background: rgba(80,0,0,0.4);
+      border: 1px solid rgba(255,69,69,0.4);
+      border-radius: 16px;
+      padding: 52px 52px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      opacity: 0;
+      transform: translateX(-180px);
+      will-change: transform, opacity;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f7-bad-card::before {
+      content: 'WITHOUT AIME';
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: rgba(255,69,69,0.4);
+    }
+
+    .f7-bad-icon {
+      font-size: 80px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.3);
+    }
+
+    .f7-bad-headline {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 54px;
+      color: #FF8080;
+      line-height: 1.1;
+    }
+
+    .f7-bad-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      color: #A89F8C;
+      line-height: 1.4;
+    }
+
+    /* VS divider */
+    .f7-vs {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: 6px;
+      color: rgba(168,159,140,0.8);
+      text-align: center;
+    }
+
+    /* GOOD card */
+    .f7-good-card {
+      width: 100%;
+      background: rgba(10,35,15,0.6);
+      border: 2px solid rgba(212,175,55,0.6);
+      border-radius: 16px;
+      padding: 52px 52px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      opacity: 0;
+      transform: translateX(180px);
+      will-change: transform, opacity;
+      box-shadow: 0 0 40px rgba(212,175,55,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .f7-good-card::before {
+      content: 'WITH AIME';
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: rgba(212,175,55,0.5);
+    }
+
+    .f7-good-icon {
+      font-size: 80px;
+      line-height: 1;
+      filter: drop-shadow(0 0 16px rgba(61,186,106,0.7));
+      opacity: 0;
+      transform: scale(0.3);
+    }
+
+    .f7-good-headline {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 60px;
+      color: #F1D18A;
+      background: linear-gradient(135deg, #F1D18A 0%, #D4AF37 45%, #B8932E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .f7-good-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #F1D18A;
+      line-height: 1.4;
+    }
+  </style>
+
+  <div class="f7-root" data-composition-id="07-comparison" data-width="1080" data-height="1920">
+    <div class="f7-bg"></div>
+    <div class="f7-inner">
+      <div class="f7-header">The Reality Check</div>
+
+      <div class="f7-bad-card" id="f7-bad">
+        <span class="f7-bad-icon" id="f7-bad-icon">❌</span>
+        <div class="f7-bad-headline">6 weeks of courses</div>
+        <div class="f7-bad-sub">while competitors win with AIME</div>
+      </div>
+
+      <div class="f7-vs">— VS —</div>
+
+      <div class="f7-good-card" id="f7-good">
+        <span class="f7-good-icon" id="f7-good-icon">✅</span>
+        <div class="f7-good-headline">6 seconds to deploy</div>
+        <div class="f7-good-sub">with AIME copy-paste systems</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    const root     = document.querySelector('.f7-root');
+    const header   = document.querySelector('.f7-header');
+    const badCard  = document.getElementById('f7-bad');
+    const goodCard = document.getElementById('f7-good');
+    const badIcon  = document.getElementById('f7-bad-icon');
+    const goodIcon = document.getElementById('f7-good-icon');
+
+    // Camera drift
+    tl.to(root, { scale: 1.02, duration: 4, ease: 'none' }, 0);
+
+    // t=0.1 — header fades in
+    tl.to(header, { opacity: 1, duration: 0.3, ease: 'power2.out' }, 0.1);
+
+    // t=0.3 — BAD card slides in from left
+    tl.to(badCard, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }, 0.3);
+
+    // t=0.7 — GOOD card slides in from right (counter-direction tension)
+    tl.to(goodCard, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }, 0.7);
+
+    // t=1.2 — icons bounce in (elastic slam)
+    tl.to(badIcon, { opacity: 1, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 1.2);
+    tl.to(goodIcon, { opacity: 1, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' }, 1.3);
+
+    // t=1.5–4.0 DEVELOPMENT
+    // Good card gold box-shadow pulses
+    tl.to(goodCard, {
+      boxShadow: '0 0 60px rgba(212,175,55,0.55)',
+      duration: 0.75,
+      ease: 'power2.inOut',
+      yoyo: true,
+      repeat: 3
+    }, 1.5);
+
+    // Bad card dims slightly
+    tl.to(badCard, { opacity: 0.65, duration: 0.8, ease: 'power2.out' }, 1.5);
+
+    // Second good card pulse burst
+    tl.to(goodCard, {
+      boxShadow: '0 0 80px rgba(212,175,55,0.7)',
+      duration: 0.5,
+      ease: 'power2.inOut',
+      yoyo: true,
+      repeat: 1
+    }, 3.0);
+
+    window.__timelines["07-comparison"] = tl;
+  </script>
+</template>
+</body>
+</html>

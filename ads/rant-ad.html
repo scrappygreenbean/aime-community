@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIME — The Rant Ad (30s)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ── Brand tokens ─────────────────────────────────────────── */
+  :root {
+    --black:      #050505;
+    --gold:       #D4AF37;
+    --champagne:  #F1D18A;
+    --glow:       #FFD76A;
+    --text:       #ECE7DA;
+    --text-muted: #A89F8C;
+    --red-x:      #FF4545;
+    --green-chk:  #3DBA6A;
+    --gold-grad:  linear-gradient(135deg, #F1D18A 0%, #D4AF37 45%, #B8932E 100%);
+    --sans: 'Montserrat', sans-serif;
+    --serif: 'Playfair Display', Georgia, serif;
+    --duration: 30s; /* total ad length */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #111;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+    overflow: hidden;
+  }
+
+  /* ── Phone frame ──────────────────────────────────────────── */
+  .phone {
+    position: relative;
+    width: 390px;
+    height: 844px;
+    border-radius: 44px;
+    background: #000;
+    box-shadow: 0 0 0 10px #1a1a1a, 0 0 0 12px #2a2a2a, 0 40px 100px rgba(0,0,0,0.7);
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* ── Ambient gold glow ────────────────────────────────────── */
+  .phone::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(600px 400px at 80% -10%, rgba(212,175,55,0.12), transparent 60%),
+      radial-gradient(500px 400px at -10% 20%, rgba(241,209,138,0.07), transparent 55%);
+  }
+
+  /* ── Background ───────────────────────────────────────────── */
+  .bg {
+    position: absolute; inset: 0;
+    background: var(--black);
+  }
+
+  /* Animated film-grain texture */
+  .bg::after {
+    content: '';
+    position: absolute; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* ── Progress bar ─────────────────────────────────────────── */
+  .progress-track {
+    position: absolute; bottom: 36px; left: 24px; right: 24px;
+    height: 3px; background: rgba(255,255,255,0.15);
+    border-radius: 2px; z-index: 100;
+  }
+  .progress-fill {
+    height: 100%; width: 0; background: var(--gold-grad);
+    border-radius: 2px;
+    animation: progress var(--duration) linear forwards;
+    animation-play-state: paused;
+  }
+  @keyframes progress { to { width: 100%; } }
+
+  /* ── Play / Pause overlay ────────────────────────────────── */
+  .play-overlay {
+    position: absolute; inset: 0; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.55);
+    transition: opacity 0.3s;
+  }
+  .play-overlay.hidden { opacity: 0; pointer-events: none; }
+  .play-btn {
+    width: 80px; height: 80px;
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    background: rgba(212,175,55,0.12);
+    box-shadow: 0 0 40px rgba(212,175,55,0.3);
+  }
+  .play-btn svg { margin-left: 6px; }
+  .play-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    color: var(--champagne); text-transform: uppercase;
+  }
+
+  /* ── Time label ───────────────────────────────────────────── */
+  .time-label {
+    position: absolute; bottom: 46px; right: 28px; z-index: 101;
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    letter-spacing: 1px; font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Scenes wrapper ───────────────────────────────────────── */
+  .scenes {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+
+  /* ── Generic scene ────────────────────────────────────────── */
+  .scene {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 48px 32px;
+    opacity: 0; pointer-events: none;
+  }
+  .scene.active { opacity: 1; pointer-events: auto; }
+
+  /* ── UGC face placeholder ─────────────────────────────────── */
+  .face-frame {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .face-circle {
+    width: 180px; height: 180px; border-radius: 50%;
+    border: 3px solid rgba(212,175,55,0.3);
+    background: #0C0A07;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 72px;
+    box-shadow: 0 0 60px rgba(212,175,55,0.12);
+  }
+
+  /* ── Text cards ───────────────────────────────────────────── */
+  .card {
+    background: rgba(15,12,8,0.88);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 16px;
+    padding: 22px 28px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,175,55,0.08);
+    max-width: 320px;
+    width: 100%;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 800; letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold-grad);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-bottom: 14px;
+  }
+
+  .headline {
+    font-family: var(--serif);
+    font-size: 28px; font-weight: 900; line-height: 1.2;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .headline.big {
+    font-size: 34px; line-height: 1.15;
+  }
+
+  .sub {
+    font-size: 14px; font-weight: 600; line-height: 1.55;
+    color: var(--text);
+  }
+
+  .sub.muted { color: var(--text-muted); font-size: 13px; }
+
+  .accent { color: var(--glow); }
+
+  /* ── Comparison block ─────────────────────────────────────── */
+  .compare-row {
+    display: flex; flex-direction: column; gap: 14px;
+    width: 100%; max-width: 320px;
+  }
+  .compare-item {
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(15,12,8,0.88);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: 1px solid rgba(212,175,55,0.15);
+  }
+  .compare-item.bad  { border-color: rgba(255,69,69,0.25); }
+  .compare-item.good { border-color: rgba(61,186,106,0.35); }
+  .compare-icon { font-size: 28px; flex-shrink: 0; }
+  .compare-text { font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text); }
+  .compare-text span { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+  .compare-item.bad  .compare-text { color: #FF8080; }
+  .compare-item.good .compare-text { color: #7EEEA4; }
+
+  /* ── Feature list ─────────────────────────────────────────── */
+  .feature-list {
+    list-style: none;
+    width: 100%; max-width: 320px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .feature-list li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 600; color: var(--text);
+    background: rgba(15,12,8,0.7);
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .feature-list li .icon { font-size: 20px; flex-shrink: 0; }
+  .feature-list li .cross {
+    color: var(--red-x); font-size: 18px; font-weight: 900; flex-shrink: 0;
+  }
+
+  /* ── CTA block ────────────────────────────────────────────── */
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold-grad);
+    color: #000;
+    font-size: 15px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    padding: 16px 36px;
+    margin-top: 20px;
+    box-shadow: 0 0 40px rgba(212,175,55,0.4);
+    text-decoration: none;
+  }
+  .url-label {
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    color: var(--champagne);
+    margin-top: 12px;
+    opacity: 0.85;
+  }
+
+  /* ── AIME logo mark ───────────────────────────────────────── */
+  .logo-mark {
+    font-family: var(--serif);
+    font-size: 48px; font-weight: 900;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+  }
+  .logo-sub {
+    font-size: 10px; font-weight: 700; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* ── Equation display ─────────────────────────────────────── */
+  .equation {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--serif); font-size: 22px; font-weight: 900;
+    color: var(--champagne); flex-wrap: wrap; justify-content: center;
+    margin: 12px 0 8px;
+  }
+  .equation .eq-gold {
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .equation .plus, .equation .eq { font-size: 20px; color: rgba(212,175,55,0.5); }
+
+  /* ── Decorative divider ───────────────────────────────────── */
+  .divider {
+    width: 60px; height: 2px;
+    background: var(--gold-grad);
+    border-radius: 1px;
+    margin: 14px auto;
+    opacity: 0.6;
+  }
+
+  /* ── Watermark corner ─────────────────────────────────────── */
+  .watermark {
+    position: absolute; bottom: 60px; left: 0; right: 0; z-index: 90;
+    text-align: center;
+    font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    color: rgba(212,175,55,0.25); text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     SCENE ANIMATIONS — each scene animates in/out on a timeline
+     All driven by animation-delay off the master keyframes.
+     ════════════════════════════════════════════════════════════ */
+
+  /* Reusable fade-in-up enter + fade-out exit */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeOutUp {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-18px); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.88); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── Stagger helper: animate children one-by-one ─────────── */
+  .stagger > * { opacity: 0; }
+  .stagger.go > *:nth-child(1) { animation: fadeInUp 0.4s ease forwards 0.0s; }
+  .stagger.go > *:nth-child(2) { animation: fadeInUp 0.4s ease forwards 0.25s; }
+  .stagger.go > *:nth-child(3) { animation: fadeInUp 0.4s ease forwards 0.5s; }
+  .stagger.go > *:nth-child(4) { animation: fadeInUp 0.4s ease forwards 0.75s; }
+  .stagger.go > *:nth-child(5) { animation: fadeInUp 0.4s ease forwards 1.0s; }
+
+  /* ── Emoji bounce ─────────────────────────────────────────── */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  .bounce { animation: bounce 0.8s ease infinite; display: inline-block; }
+
+  /* ── Gold pulse glow ──────────────────────────────────────── */
+  @keyframes goldPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(212,175,55,0.3); }
+    50%       { box-shadow: 0 0 60px rgba(212,175,55,0.55); }
+  }
+  .pulse { animation: goldPulse 2s ease-in-out infinite; }
+
+  /* ── Blink cursor ─────────────────────────────────────────── */
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor::after { content: '|'; animation: blink 0.8s step-end infinite; color: var(--gold); }
+
+  /* ── Scene-specific status bar ────────────────────────────── */
+  .status-bar {
+    position: absolute; top: 16px; left: 28px; right: 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 50;
+  }
+  .status-time {
+    font-size: 13px; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { opacity: 0.5; }
+
+  /* ── Scene label badge ────────────────────────────────────── */
+  .scene-badge {
+    position: absolute; top: 52px; left: 28px; z-index: 50;
+    font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; color: rgba(212,175,55,0.4);
+  }
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone" onclick="togglePlay()">
+
+  <!-- Background -->
+  <div class="bg"></div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time" id="clock">9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="#ECE7DA">
+        <rect x="0" y="3" width="3" height="9" rx="1"/>
+        <rect x="4.5" y="2" width="3" height="10" rx="1"/>
+        <rect x="9" y="0" width="3" height="12" rx="1"/>
+        <rect x="13.5" y="0" width="2" height="12" rx="1" opacity=".35"/>
+      </svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="#ECE7DA">
+        <path d="M7.5 2.5C9.8 2.5 11.85 3.4 13.35 4.9L14.85 3.4C12.95 1.5 10.35.4 7.5.4S2.05 1.5.15 3.4L1.65 4.9C3.15 3.4 5.2 2.5 7.5 2.5Z" opacity=".6"/>
+        <path d="M7.5 5.5C9 5.5 10.35 6.1 11.35 7.05L12.85 5.55C11.45 4.2 9.55 3.5 7.5 3.5S3.55 4.2 2.15 5.55L3.65 7.05C4.65 6.1 6 5.5 7.5 5.5Z" opacity=".8"/>
+        <circle cx="7.5" cy="10" r="1.5"/>
+      </svg>
+      <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
+        <rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="#ECE7DA" stroke-opacity=".35"/>
+        <rect x="2" y="2" width="18" height="8" rx="2" fill="#ECE7DA" opacity=".7"/>
+        <path d="M24 4v4a2 2 0 0 0 0-4Z" fill="#ECE7DA" opacity=".4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Scene badge -->
+  <div class="scene-badge" id="sceneBadge">◆ Ad 1 · The Rant</div>
+
+  <!-- Scenes -->
+  <div class="scenes" id="scenes">
+
+    <!-- S0: HOOK — 0-3s -->
+    <div class="scene" id="s0" data-in="0" data-out="3">
+      <div class="card" style="border-color: rgba(255,69,69,0.4); background: rgba(15,5,5,0.92);">
+        <div class="tag" style="background: linear-gradient(135deg,#FF6B6B,#FF4545); color: #fff;">🚫 Breaking News</div>
+        <div class="headline big" style="-webkit-text-fill-color: #FF7070; background: none;">I'm officially<br>boycotting<br>AI courses.</div>
+      </div>
+    </div>
+
+    <!-- S1: The story — 3-8s -->
+    <div class="scene" id="s1" data-in="3" data-out="8">
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; padding: 80px 28px;">
+        <div class="face-circle">😤</div>
+        <div class="card stagger" id="s1card">
+          <div class="sub" style="font-size:16px; line-height:1.5;">I spent <span class="accent" style="color:#FF7070; font-weight:800;">3 months</span> "learning ChatGPT"</div>
+          <div class="divider"></div>
+          <div class="sub muted">Courses. Tutorials. Prompt packs.<br>You name it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S2: The gut punch — 8-13s -->
+    <div class="scene" id="s2" data-in="8" data-out="13">
+      <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px; padding: 80px 28px;">
+        <div class="face-circle">😱</div>
+        <div class="card">
+          <div class="tag">Meanwhile…</div>
+          <div class="sub" style="font-size:15px; line-height:1.6;">My competitor spent <span class="accent" style="font-weight:800; font-size:18px;">3 minutes</span> using AIME</div>
+          <div class="divider"></div>
+          <div class="headline" style="font-size:20px; margin:0;">and took my client.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S3: What is AIME — 13-17s -->
+    <div class="scene" id="s3" data-in="13" data-out="17">
+      <div style="text-align:center; padding: 40px 32px;">
+        <div class="logo-mark">AIME</div>
+        <div class="logo-sub">What does it stand for?</div>
+        <div class="equation">
+          <span class="eq-gold">Artificial<br>Intelligence</span>
+          <span class="plus">+</span>
+          <span class="eq-gold">Me</span>
+        </div>
+        <div class="divider"></div>
+        <div class="sub muted" style="margin-top:12px;">Your edge. Not another course.</div>
+      </div>
+    </div>
+
+    <!-- S4: No courses — 17-21s -->
+    <div class="scene" id="s4" data-in="17" data-out="21">
+      <div style="padding: 40px 28px; width: 100%;">
+        <div class="tag" style="margin-bottom:16px;">What AIME is NOT</div>
+        <ul class="feature-list stagger" id="s4list">
+          <li><span class="cross">✕</span> No courses to finish</li>
+          <li><span class="cross">✕</span> No prompt packs to study</li>
+          <li><span class="cross">✕</span> No homework. Ever.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- S5: Copy-paste systems — 21-25s -->
+    <div class="scene" id="s5" data-in="21" data-out="25">
+      <div style="padding: 40px 28px; width: 100%;">
+        <div class="tag" style="margin-bottom:16px;">What AIME IS</div>
+        <ul class="feature-list stagger" id="s5list">
+          <li><span class="icon">📋</span> Listing copy — done</li>
+          <li><span class="icon">📧</span> Emails — done</li>
+          <li><span class="icon">📱</span> Social posts — done</li>
+          <li><span class="icon">🔁</span> Follow-ups — done</li>
+        </ul>
+        <div class="sub muted" style="margin-top:14px; font-size:12px; text-align:center;">Built for real estate + insurance agents.</div>
+      </div>
+    </div>
+
+    <!-- S6: The comparison — 25-28s -->
+    <div class="scene" id="s6" data-in="25" data-out="28">
+      <div style="padding: 40px 28px; width: 100%;">
+        <div class="tag" style="margin-bottom:18px;">The Reality Check</div>
+        <div class="compare-row stagger" id="s6rows">
+          <div class="compare-item bad">
+            <div class="compare-icon">❌</div>
+            <div class="compare-text">6 weeks of courses<span>vs. watching competitors win</span></div>
+          </div>
+          <div class="compare-item good pulse">
+            <div class="compare-icon">✅</div>
+            <div class="compare-text">6 seconds to deploy<span>with AIME copy-paste systems</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- S7: CTA — 28-30s -->
+    <div class="scene" id="s7" data-in="28" data-out="30">
+      <div style="text-align:center; padding: 40px 32px;">
+        <div class="logo-mark">AIME</div>
+        <div class="headline" style="font-size:22px; margin-bottom:8px;">Done Learning AI?</div>
+        <div class="sub" style="font-size:16px; font-weight:700; color:var(--champagne);">Copy. Paste. Get Sh*t Done.</div>
+        <div class="divider"></div>
+        <div class="sub muted" style="font-size:14px; margin-bottom:4px;">Stop learning. Start deploying.</div>
+        <div style="font-size:28px; margin:8px 0;" class="bounce">👇</div>
+        <a class="cta-btn" href="https://gotaime.com" onclick="return false;">Learn More</a>
+        <div class="url-label">Gotaime.com</div>
+      </div>
+    </div>
+
+  </div><!-- /scenes -->
+
+  <!-- Watermark -->
+  <div class="watermark">gotaime.com</div>
+
+  <!-- Progress bar -->
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="time-label" id="timeLabel">0:30</div>
+
+  <!-- Play overlay -->
+  <div class="play-overlay" id="playOverlay">
+    <div class="play-btn">
+      <svg width="28" height="32" viewBox="0 0 28 32" fill="#D4AF37">
+        <path d="M0 0 L28 16 L0 32 Z"/>
+      </svg>
+    </div>
+    <div class="play-label">Tap to Play</div>
+    <div style="margin-top:10px; font-size:11px; color:rgba(212,175,55,0.45); letter-spacing:1px;">30 SECOND AD PREVIEW</div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+  const TOTAL = 30; // seconds
+  let playing = false;
+  let startTime = null;
+  let elapsed = 0;
+  let rafId = null;
+  let activeScene = null;
+
+  const scenes = Array.from(document.querySelectorAll('.scene'));
+  const progressFill = document.getElementById('progressFill');
+  const timeLabel = document.getElementById('timeLabel');
+  const playOverlay = document.getElementById('playOverlay');
+
+  // Scene data
+  const sceneData = scenes.map(s => ({
+    el: s,
+    in: parseFloat(s.dataset.in),
+    out: parseFloat(s.dataset.out)
+  }));
+
+  function formatTime(secs) {
+    const s = Math.ceil(TOTAL - secs);
+    return `0:${String(Math.max(0, s)).padStart(2, '0')}`;
+  }
+
+  function showScene(t) {
+    let shown = null;
+    sceneData.forEach(sd => {
+      const active = t >= sd.in && t < sd.out;
+      sd.el.classList.toggle('active', active);
+      if (active) shown = sd;
+    });
+
+    // Trigger stagger animations when scene first becomes active
+    if (shown && shown.el !== activeScene) {
+      activeScene = shown.el;
+      // Find stagger groups inside this scene and add .go
+      shown.el.querySelectorAll('.stagger').forEach(g => {
+        g.classList.remove('go');
+        requestAnimationFrame(() => requestAnimationFrame(() => g.classList.add('go')));
+      });
+    }
+  }
+
+  function tick(ts) {
+    if (!playing) return;
+    if (!startTime) startTime = ts;
+    elapsed = (ts - startTime) / 1000;
+
+    if (elapsed >= TOTAL) {
+      elapsed = TOTAL;
+      showScene(TOTAL - 0.001);
+      progressFill.style.animationPlayState = 'paused';
+      timeLabel.textContent = '0:00';
+      playing = false;
+      setTimeout(() => playOverlay.classList.remove('hidden'), 600);
+      return;
+    }
+
+    const pct = (elapsed / TOTAL) * 100;
+    progressFill.style.width = pct + '%';
+    timeLabel.textContent = formatTime(elapsed);
+    showScene(elapsed);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function togglePlay() {
+    if (playing) {
+      playing = false;
+      cancelAnimationFrame(rafId);
+      playOverlay.classList.remove('hidden');
+      // Update play overlay to show resume icon
+    } else {
+      if (elapsed >= TOTAL) {
+        // Restart
+        elapsed = 0;
+        startTime = null;
+        progressFill.style.width = '0%';
+        activeScene = null;
+      }
+      playing = true;
+      playOverlay.classList.add('hidden');
+      if (startTime) {
+        // Adjust startTime to account for paused duration
+        startTime = performance.now() - elapsed * 1000;
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  // Clock display
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.getHours() % 12 || 12 + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // Initial state: show scene 0 preview
+  showScene(0);
+</script>
+</body>
+</html>

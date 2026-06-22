@@ -9,6 +9,6 @@ desktop.ini
 # Dependencies (this site has none, but just in case)
 node_modules/
 
-# Env files — never commit secrets (this static POC has none)
+# Env files — never commit secrets
 .env
-.env.*
+generated_videos/

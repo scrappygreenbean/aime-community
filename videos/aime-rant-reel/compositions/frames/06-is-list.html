@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"/></head>
+<body>
+<template>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@600;700;800;900&display=swap');
+
+    .f6-root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background: #050505;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .f6-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 15%, rgba(61,186,106,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 70% at 15% 90%, rgba(0,50,20,0.2) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 85% 50%, rgba(212,175,55,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .f6-inner {
+      position: relative;
+      width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .f6-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%);
+      border: 1.5px solid rgba(212,175,55,0.6);
+      border-radius: 100px;
+      padding: 14px 44px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #D4AF37;
+      opacity: 0;
+      transform: translateY(-28px) scale(0.9);
+    }
+
+    .f6-pill-star {
+      font-size: 20px;
+    }
+
+    .f6-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .f6-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 34px 44px;
+      background: rgba(0,50,20,0.3);
+      border-left: 4px solid #3DBA6A;
+      border-radius: 12px;
+      opacity: 0;
+      transform: translateY(60px);
+      will-change: transform, opacity;
+    }
+
+    .f6-check {
+      font-size: 50px;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 12px rgba(61,186,106,0.6));
+      color: #ECE7DA;
+    }
+
+    .f6-label {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 48px;
+      color: #ECE7DA;
+      line-height: 1.1;
+    }
+
+    .f6-done {
+      color: #D4AF37;
+      font-style: italic;
+    }
+
+    .f6-caption {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #A89F8C;
+      text-align: center;
+      letter-spacing: 0.5px;
+      opacity: 0;
+      transform: translateY(20px);
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+
+    .f6-caption em {
+      color: #D4AF37;
+      font-style: normal;
+      font-weight: 700;
+    }
+  </style>
+
+  <div class="f6-root" data-composition-id="06-is-list" data-width="1080" data-height="1920">
+    <div class="f6-bg"></div>
+    <div class="f6-inner">
+      <div class="f6-pill">
+        <span class="f6-pill-star">✦</span>
+        What AIME Is
+        <span class="f6-pill-star">✦</span>
+      </div>
+      <div class="f6-list">
+        <div class="f6-row" id="f6-row1">
+          <span class="f6-check">✅</span>
+          <span class="f6-label">Listing copy <span class="f6-done">— done</span></span>
+        </div>
+        <div class="f6-row" id="f6-row2">
+          <span class="f6-check">✅</span>
+          <span class="f6-label">Emails <span class="f6-done">— done</span></span>
+        </div>
+        <div class="f6-row" id="f6-row3">
+          <span class="f6-check">✅</span>
+          <span class="f6-label">Social posts <span class="f6-done">— done</span></span>
+        </div>
+        <div class="f6-row" id="f6-row4">
+          <span class="f6-check">✅</span>
+          <span class="f6-label">Follow-ups <span class="f6-done">— done</span></span>
+        </div>
+      </div>
+      <div class="f6-caption">
+        Built for <em>real estate + insurance</em> agents.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    const root    = document.querySelector('.f6-root');
+    const pill    = document.querySelector('.f6-pill');
+    const row1    = document.getElementById('f6-row1');
+    const row2    = document.getElementById('f6-row2');
+    const row3    = document.getElementById('f6-row3');
+    const row4    = document.getElementById('f6-row4');
+    const caption = document.querySelector('.f6-caption');
+    const dones   = document.querySelectorAll('.f6-done');
+
+    // Camera drift
+    tl.to(root, { scale: 1.02, duration: 4, ease: 'none' }, 0);
+
+    // t=0.1 — pill snaps down
+    tl.to(pill, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.7)' }, 0.1);
+
+    // t=0.2–0.95 — rows slide up
+    tl.to(row1, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.2);
+    tl.to(row2, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.45);
+    tl.to(row3, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.7);
+    tl.to(row4, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.95);
+
+    // t=1.2 — caption fades up
+    tl.to(caption, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 1.2);
+
+    // t=1.5–4.0 DEVELOPMENT — gold shimmer pulse on "— done" text in sequence, cycling
+    const donePulseOptions = { color: '#FFD76A', textShadow: '0 0 20px rgba(255,215,106,0.9)', duration: 0.25, ease: 'power2.inOut', yoyo: true, repeat: 1 };
+
+    // Cycle 1
+    tl.to(dones[0], donePulseOptions, 1.5);
+    tl.to(dones[1], donePulseOptions, 1.85);
+    tl.to(dones[2], donePulseOptions, 2.2);
+    tl.to(dones[3], donePulseOptions, 2.55);
+    // Cycle 2
+    tl.to(dones[0], donePulseOptions, 2.9);
+    tl.to(dones[1], donePulseOptions, 3.15);
+    tl.to(dones[2], donePulseOptions, 3.4);
+    tl.to(dones[3], donePulseOptions, 3.65);
+
+    window.__timelines["06-is-list"] = tl;
+  </script>
+</template>
+</body>
+</html>

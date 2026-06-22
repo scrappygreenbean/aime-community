@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head><meta charset="UTF-8"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+</head>
+<body>
+<template>
+  <style>
+    .f1-root {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      background: #050505;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .f1-badge {
+      position: absolute;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(212, 175, 55, 0.15);
+      border: 1.5px solid rgba(212, 175, 55, 0.6);
+      border-radius: 100px;
+      padding: 14px 36px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 30px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #D4AF37;
+      white-space: nowrap;
+      opacity: 0;
+    }
+
+    .f1-headline-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+      padding: 0 60px;
+    }
+
+    .f1-line1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 108px;
+      line-height: 1.0;
+      color: #ECE7DA;
+      opacity: 0;
+      transform: translateX(-120px);
+      text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+    }
+
+    .f1-line2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 140px;
+      line-height: 0.95;
+      background: linear-gradient(135deg, #F1D18A 0%, #D4AF37 45%, #B8932E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: scale(2);
+      filter: drop-shadow(0 0 30px rgba(212,175,55,0.7));
+      display: block;
+    }
+
+    .f1-line3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 110px;
+      line-height: 1.0;
+      color: #ECE7DA;
+      opacity: 0;
+      transform: translateY(80px);
+      text-shadow: 0 2px 40px rgba(0,0,0,0.8);
+    }
+
+    .f1-emoji {
+      margin-top: 48px;
+      font-size: 110px;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.2);
+      display: block;
+    }
+
+    /* Shimmer overlay for gold text */
+    .f1-line2-wrap {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+    }
+
+    .f1-shimmer {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+      pointer-events: none;
+      transform: skewX(-15deg);
+    }
+  </style>
+  <div class="f1-root" data-composition-id="01-hook" data-width="1080" data-height="1920">
+    <div class="f1-badge">BREAKING 🚫</div>
+    <div class="f1-headline-wrap">
+      <div class="f1-line1">I'm officially</div>
+      <div class="f1-line2-wrap">
+        <div class="f1-line2">BOYCOTTING</div>
+        <div class="f1-shimmer"></div>
+      </div>
+      <div class="f1-line3">AI COURSES.</div>
+    </div>
+    <div class="f1-emoji">🚫</div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    const tl = gsap.timeline({ paused: true });
+
+    // t=0.1: badge slides down from top
+    tl.to(".f1-badge", {
+      opacity: 1,
+      y: 0,
+      duration: 0.35,
+      ease: "back.out(1.7)"
+    }, 0.1);
+
+    // t=0.2: "I'm officially" slides in from left
+    tl.to(".f1-line1", {
+      opacity: 1,
+      x: 0,
+      duration: 0.4,
+      ease: "power3.out"
+    }, 0.2);
+
+    // t=0.4: "BOYCOTTING" SLAMS in with scale + elastic bounce
+    tl.to(".f1-line2", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.55,
+      ease: "elastic.out(1, 0.5)"
+    }, 0.4);
+
+    // t=0.65: "AI COURSES." snaps in from bottom
+    tl.to(".f1-line3", {
+      opacity: 1,
+      y: 0,
+      duration: 0.3,
+      ease: "back.out(1.7)"
+    }, 0.65);
+
+    // t=0.9: emoji bounces in
+    tl.to(".f1-emoji", {
+      opacity: 1,
+      scale: 1,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.5)"
+    }, 0.9);
+
+    // t=1.0–2.0: slow scale drift on root
+    tl.to(".f1-root", {
+      scale: 1.02,
+      duration: 1.0,
+      ease: "power1.inOut"
+    }, 1.0);
+
+    // Gold shimmer sweeps across BOYCOTTING text (loops)
+    tl.fromTo(".f1-shimmer",
+      { x: "-100%" },
+      {
+        x: "250%",
+        duration: 1.2,
+        ease: "power2.inOut",
+        repeat: -1,
+        repeatDelay: 0.8
+      },
+      1.0
+    );
+
+    // Subtle filter glow pulse on line2
+    tl.to(".f1-line2", {
+      filter: "drop-shadow(0 0 50px rgba(212,175,55,0.9))",
+      duration: 0.6,
+      ease: "power2.inOut",
+      yoyo: true,
+      repeat: -1
+    }, 1.2);
+
+    window.__timelines["01-hook"] = tl;
+  </script>
+</template>
+</body>
+</html>
