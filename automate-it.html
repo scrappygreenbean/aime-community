@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automate It · The Realtor's AIME</title>
+  <meta name="description" content="Step-by-step guides to schedule AIME prompts in Claude, ChatGPT, and Gemini — so your AI team runs on autopilot." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand-lockup" href="index.html">
+        <span class="emblem"><span>A</span></span>
+        <span class="brand-names">
+          <span class="b1">The Realtor's AIME</span>
+          <span class="b2">Community OS</span>
+        </span>
+      </a>
+      <nav class="header-nav">
+        <a href="start-here.html">Start Here</a>
+        <a href="ai-employees.html">AI Employees</a>
+        <a href="resources.html">Resources</a>
+        <a href="automate-it.html" style="color:var(--gold)">Automate It</a>
+        <a class="header-cta" href="ai-employees.html">Get Prompts</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ PAGE HERO ============ -->
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>&rsaquo;</span> <span>Automate It</span>
+      </div>
+      <div class="eyebrow" style="margin-bottom:18px;">Guides</div>
+      <h1>Automate It — <span class="gold-text">set it up once.</span></h1>
+      <p>
+        Stop copy-pasting the same prompt every morning. These guides show you how to give
+        Claude, ChatGPT, or Gemini a standing instruction — so your AI team is ready
+        before you finish your first cup of coffee.
+      </p>
+    </div>
+  </section>
+
+  <main class="wrap">
+
+    <!-- ============ INTRO ============ -->
+    <div class="content-section">
+      <div class="content-card wide-card">
+        <div class="eyebrow" style="margin-bottom:14px;">Before you automate</div>
+        <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:20px;">
+          How automations <span class="gold-text">work with AIME</span>
+        </h2>
+        <div class="prose">
+          <p>
+            None of these automations connect directly to your MLS, your CRM, or your clients.
+            That's intentional. You're not handing your business to a robot — you're giving the
+            robot your standing instructions so that when you show up and paste your data,
+            it already knows what to do.
+          </p>
+          <p>
+            Think of it like briefing a new assistant before they start. You tell them your voice,
+            your rules, your preferences — once. Every conversation after that, they already know.
+          </p>
+          <p>
+            The most powerful setup: save your voice block (see <a href="resources.html" class="inline-link">Resources</a>)
+            into your AI platform's "memory" or "custom instructions" — then every AIME prompt
+            you run automatically sounds like you.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hairline-divider"></div>
+
+    <!-- ============ PLATFORM TABS ============ -->
+    <div class="content-section">
+      <div class="platform-tabs" id="platform-tabs">
+        <button class="ptab active" data-platform="claude">Claude</button>
+        <button class="ptab" data-platform="chatgpt">ChatGPT</button>
+        <button class="ptab" data-platform="gemini">Gemini</button>
+      </div>
+
+      <!-- CLAUDE -->
+      <div class="platform-panel active" id="panel-claude">
+        <div class="platform-header">
+          <div class="platform-logo claude-logo">C</div>
+          <div>
+            <h2>Claude <span class="gold-text">Setup Guide</span></h2>
+            <p style="color:var(--text-muted);margin-top:6px;">
+              Claude.ai by Anthropic. Best for nuanced writing, fiduciary-minded responses, and
+              following complex instructions precisely. Free tier available — Claude Pro ($20/mo) gets
+              you more capacity and access to the more capable models.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 1 — Save your voice once (Projects)</div>
+          <h3 style="margin-bottom:20px;">Set up a <span class="gold-text">Realtor's AIME Project</span></h3>
+
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Create a new Project</h3>
+                <p>In Claude.ai, click <strong>"New Project"</strong> in the left sidebar. Name it "Realtor's AIME" or "My AI Team." Projects let you give Claude standing instructions that apply to every conversation inside that project.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Add your voice block as the Project Instructions</h3>
+                <p>Open the project settings and paste your filled-in voice block from the <a href="resources.html" class="inline-link">Resources page</a> into the "Custom Instructions" or "Project Instructions" field. Click save.</p>
+                <div class="mini-note">Now every conversation inside this project already knows who you are, how you sound, and what you never say — without you pasting it again.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Add your prompts as Project files (optional)</h3>
+                <p>You can upload a text file with all 10 AIME prompts as a Project knowledge file. Then instead of copy-pasting the prompt, you just say "Use the Morning Briefing prompt" and Claude already has it.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h3>Test it</h3>
+                <p>Start a new conversation inside the project. Type: <code>"Run my morning briefing. Here's my pipeline: [paste your pipeline]"</code>. Claude will use the prompt structure and your voice automatically.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 2 — Scheduled morning briefing</div>
+          <h3 style="margin-bottom:20px;">Make Scout <span class="gold-text">run every Monday</span></h3>
+          <div class="prose">
+            <p>
+              Claude doesn't send you messages on a schedule — but you can make your Monday
+              morning briefing take under 60 seconds by setting it up as a saved conversation
+              template.
+            </p>
+          </div>
+          <div class="step-list" style="margin-top:24px;">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Save a "Monday Briefing" starter template</h3>
+                <p>In your phone's notes app or a Google Doc, save this exact message:</p>
+                <div class="mini-code">Run my morning pipeline briefing (Scout prompt).
+
+ACTIVE LISTINGS:
+[paste here]
+
+LIVE BUYERS:
+[paste here]
+
+PENDING:
+[paste here]
+
+LEADS:
+[paste here]
+
+MY SCHEDULE TODAY:
+[paste here]</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Monday morning ritual: fill and fire</h3>
+                <p>Every Monday (or every morning), open your saved template, fill in your pipeline, paste it into Claude, send. Under 3 minutes. Done.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Set a phone reminder</h3>
+                <p>Set a recurring reminder on your phone for Monday at 7:30 AM: "Run Scout briefing." That's your automation — a reminder so you actually do it, an AI that does the thinking once you paste.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 3 — Batch your follow-ups</div>
+          <h3 style="margin-bottom:20px;">Run Dale for <span class="gold-text">your whole lead list</span> in one session</h3>
+          <div class="step-list" style="margin-top:16px;">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Pull your "needs a touch" list</h3>
+                <p>Every Friday (or whatever day works), filter your CRM for contacts with no activity in 14+ days. Copy the list.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Run one prompt, ask for multiple outputs</h3>
+                <p>In your Claude project, paste the Dale prompt and add: <em>"I have [X] follow-ups to write. I'll give you each person's context one at a time. For each one, give me the email, the SMS, and the backup touch — then wait for me to give you the next one."</em></p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Paste each person's context, get each output</h3>
+                <p>Go one at a time. Review each message before moving to the next. This takes about 10–15 minutes for 5–8 follow-ups — instead of the 45 minutes you've been avoiding it for.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHATGPT -->
+      <div class="platform-panel" id="panel-chatgpt">
+        <div class="platform-header">
+          <div class="platform-logo chatgpt-logo">G</div>
+          <div>
+            <h2>ChatGPT <span class="gold-text">Setup Guide</span></h2>
+            <p style="color:var(--text-muted);margin-top:6px;">
+              OpenAI's ChatGPT. Excellent generalist, good with structure and lists, widely used.
+              Free tier (GPT-3.5) works for most tasks — ChatGPT Plus ($20/mo) gives you GPT-4o
+              with better reasoning and image understanding.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 1 — Save your voice (Custom Instructions)</div>
+          <h3 style="margin-bottom:20px;">Set up <span class="gold-text">Custom Instructions</span></h3>
+
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Open Custom Instructions</h3>
+                <p>In ChatGPT, click your profile picture (bottom left on desktop, top right on mobile) → <strong>"Custom Instructions."</strong></p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Fill in the two fields</h3>
+                <p>
+                  <strong>Field 1 — "What would you like ChatGPT to know about you?"</strong><br/>
+                  Paste the top half of your voice block: who you are, your market, your specialty, your fiduciary standard.
+                </p>
+                <p style="margin-top:12px;">
+                  <strong>Field 2 — "How would you like ChatGPT to respond?"</strong><br/>
+                  Paste the bottom half: your voice rules, what you never say, what you do say.
+                </p>
+                <div class="mini-note">These apply to every ChatGPT conversation going forward. You don't need to paste them again.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Save and test</h3>
+                <p>Start a new chat. Ask: <em>"Write a short follow-up email to a buyer who went quiet after a showing."</em> Check if it sounds like your voice. Adjust the custom instructions if it doesn't.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 2 — Create a GPT for each employee</div>
+          <h3 style="margin-bottom:20px;">Build <span class="gold-text">your own GPTs</span></h3>
+          <div class="prose" style="margin-bottom:20px;">
+            <p>
+              ChatGPT Plus lets you build custom GPTs — mini AI assistants with a built-in
+              system prompt. You can make one GPT per AIME employee, so instead of pasting
+              the prompt every time, you just open "Dale" and start typing your context.
+            </p>
+          </div>
+
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Go to "Create a GPT"</h3>
+                <p>In ChatGPT Plus, click "Explore GPTs" → "Create." Give it the employee's name (e.g., "Dale — Follow-Up Writer").</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Paste the AIME prompt into the Instructions field</h3>
+                <p>Copy the full prompt from the <a href="ai-employees.html" class="inline-link">AI Employees page</a>. Paste it into the "Instructions" field in the GPT builder. Also paste your voice block at the top.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Add a conversation starter</h3>
+                <p>In the "Conversation starters" field, add: <em>"I have a follow-up to write. Here's the situation:"</em>. Now when you open Dale, that starter appears and you just fill in the context.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h3>Save as private, repeat for each employee</h3>
+                <p>Save each GPT as "Only me." You now have a personal AI team menu. Click the employee's name, drop in your context, get the output. No prompt pasting required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 3 — Social content batching</div>
+          <h3 style="margin-bottom:20px;">A week of posts in <span class="gold-text">20 minutes</span></h3>
+          <div class="step-list" style="margin-top:16px;">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Open your Reese GPT (or paste the Social Media Manager prompt)</h3>
+                <p>Tell Reese: <em>"I'm going to give you 3 things to turn into posts. Do them one at a time and wait for me to approve each one before moving to the next."</em></p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Feed it your content</h3>
+                <p>Drop in your just-sold, your market update, and one educational tip. Get 3 sets of posts — Instagram, Facebook, and a Reels hook for each. That's a full week of content.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Schedule them out</h3>
+                <p>Copy the approved posts into Buffer, Later, or Meta Business Suite. Schedule Monday, Wednesday, Friday. Done by Sunday night. You're showing up all week without touching your phone on Tuesday morning.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GEMINI -->
+      <div class="platform-panel" id="panel-gemini">
+        <div class="platform-header">
+          <div class="platform-logo gemini-logo">G</div>
+          <div>
+            <h2>Gemini <span class="gold-text">Setup Guide</span></h2>
+            <p style="color:var(--text-muted);margin-top:6px;">
+              Google's Gemini. Best if you live in Google Workspace — it connects directly to
+              Gmail, Docs, Drive, and Calendar. The "Gems" feature lets you build standing
+              AI assistants, similar to custom GPTs. Free tier available; Gemini Advanced ($20/mo)
+              unlocks the more capable models and Gems.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 1 — Build your AIME Gems</div>
+          <h3 style="margin-bottom:20px;">Create a <span class="gold-text">Gem for each employee</span></h3>
+
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Open Gems</h3>
+                <p>In Gemini (gemini.google.com), click <strong>"Gems"</strong> in the left sidebar → <strong>"New Gem."</strong> Gems are Gemini's version of a custom AI assistant with built-in instructions.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Name it and paste the instructions</h3>
+                <p>Name it after the employee (e.g., "Scout — Morning Briefing"). In the Instructions field, paste your voice block first, then the full prompt from the AI Employees page.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Save and pin it</h3>
+                <p>Save the Gem. Pin your most-used ones to the sidebar for one-click access. You can build all 10 and keep them organized in one place.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 2 — Gmail integration</div>
+          <h3 style="margin-bottom:20px;">Write follow-ups <span class="gold-text">from inside Gmail</span></h3>
+          <div class="prose" style="margin-bottom:20px;">
+            <p>
+              If you use Gmail and Google Workspace, Gemini is built into the compose window.
+              You can ask it to draft based on a thread context — with your standing instructions
+              already applied.
+            </p>
+          </div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Open a Gmail compose window</h3>
+                <p>Click compose. In the bottom toolbar, look for the Gemini star icon. Click it to open the AI compose sidebar.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-body">
+                <h3>Give it the Dale context</h3>
+                <p>Type: <em>"Write a follow-up email to a buyer who toured last week and went quiet. They care about schools and garage space. Keep it under 100 words, warm, one clear next step."</em> Gemini writes the draft, you review and send.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-body">
+                <h3>Refine with your voice block</h3>
+                <p>If the first draft is too generic, add: <em>"Make it sound less like a form letter. Direct, specific, no 'circling back.'"</em> One revision is usually all it needs.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="guide-section">
+          <div class="eyebrow" style="margin-bottom:16px;">Skill 3 — Google Docs CMA workflow</div>
+          <h3 style="margin-bottom:20px;">Build your CMA story <span class="gold-text">in Google Docs</span></h3>
+          <div class="step-list" style="margin-top:16px;">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h3>Create a CMA template Doc</h3>
+                <p>In Google Docs, create a template with the fields from the Harper (CMA/Market Analyst) prompt — subject property, comps, active competition, seller goal.</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h3>Fill in your data, then use Gemini to write the story</h3>
+                <p>Highlight your completed data fields, click the Gemini icon → <em>"Help me write the pricing story from this data using my voice (direct, honest, no hype, plain English)."</em></p>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h3>Edit and export</h3>
+                <p>Review the output inside the Doc, make your edits, and you have a ready-to-print CMA narrative. The whole data entry + story = under 20 minutes per listing appointment.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hairline-divider"></div>
+
+    <!-- ============ AUTOMATIONS INTRO ============ -->
+    <div class="content-section">
+      <div class="section-head" style="text-align:left;margin-bottom:32px;">
+        <div class="eyebrow" style="margin-bottom:12px;">Beyond AI Chat</div>
+        <h2>What <span class="gold-text">automations</span> can actually do</h2>
+        <p style="color:var(--text-muted);max-width:640px;margin-top:12px;">
+          The guides above are about making your AI prompts easier to run. These are the actual
+          automations — tools that connect your systems and trigger things without you.
+          Start simple. Build from there.
+        </p>
+      </div>
+
+      <div class="auto-grid">
+        <div class="auto-card">
+          <h3>Zapier + Gmail</h3>
+          <p>Trigger: New Zillow/realtor.com lead arrives in Gmail.<br/>
+          Action: Zapier sends you a Slack/text with the lead summary and a pre-written Dale follow-up to review and send. You review, click send. Takes 30 seconds instead of 15 minutes.</p>
+          <div class="auto-level">Level: Beginner — no code required</div>
+        </div>
+
+        <div class="auto-card">
+          <h3>Monday.com / Notion + AI</h3>
+          <p>Build a pipeline board where each card has a "Generate follow-up" button (via Zapier or Make.com). Click the button, your pipeline data fills the Dale prompt automatically, and the draft appears in your inbox. Review and send.</p>
+          <div class="auto-level">Level: Intermediate — some setup required</div>
+        </div>
+
+        <div class="auto-card">
+          <h3>Recurring calendar blocks</h3>
+          <p>The simplest automation: a recurring Google Calendar event every Monday at 8 AM titled "Scout Briefing — paste pipeline." When it fires, you know exactly what to do. Boring? Yes. Works? Every time.</p>
+          <div class="auto-level">Level: Beginner — literally just a calendar event</div>
+        </div>
+
+        <div class="auto-card">
+          <h3>Social scheduling stack</h3>
+          <p>Reese writes your posts → you approve → Buffer or Later schedules them. Connect Buffer to Instagram, Facebook, and LinkedIn. One 20-minute session per week covers your whole social presence.</p>
+          <div class="auto-level">Level: Beginner — Buffer free tier works fine</div>
+        </div>
+
+        <div class="auto-card">
+          <h3>Make.com + CRM triggers</h3>
+          <p>When a lead hasn't been contacted in 14 days (CRM trigger) → Make.com pulls their info and sends you a draft Dale follow-up to a specific email folder labeled "Follow-Ups To Send." You open the folder, review each one, click send. AI queues them up; you are the final filter.</p>
+          <div class="auto-level">Level: Advanced — requires CRM + Make.com setup</div>
+        </div>
+
+        <div class="auto-card">
+          <h3>Open house → post-event trigger</h3>
+          <p>Add open house attendees to a Google Sheet with their email and notes during the event. Zapier triggers the Beau (Open House) prompt with that data, creates a draft follow-up in Gmail for each attendee. You review and send the same evening.</p>
+          <div class="auto-level">Level: Intermediate — Google Sheets + Zapier</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CTA STRIP ============ -->
+    <div class="cta-strip">
+      <h2>Questions about <span class="gold-text">your setup?</span></h2>
+      <p>The community is here. Ask your question, share what's working, and steal what others built.</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <a class="cta-btn" href="ai-employees.html">Get the Prompts &rarr;</a>
+        <a class="cta-btn secondary" href="resources.html">Voice Block &rarr;</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-tag">
+        <strong>The Realtor's AIME</strong> — Where Human Insight Meets AI Intelligence.
+      </div>
+      <div class="footer-meta">
+        <a href="mailto:hello@gotaime.com">hello@gotaime.com</a> &nbsp;·&nbsp; community.gotaime.com &nbsp;·&nbsp; $88 lifetime, no upsells.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Platform tabs */
+    const tabs   = document.querySelectorAll('.ptab');
+    const panels = document.querySelectorAll('.platform-panel');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const id = tab.dataset.platform;
+        tabs.forEach((t) => t.classList.remove('active'));
+        panels.forEach((p) => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + id).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
