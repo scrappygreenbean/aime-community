@@ -1,10 +1,10 @@
 /* =====================================================================
    AI Employees page — renders the gallery and the hash-routed detail
-   view. Static, no build step, no framework. Just the DOM.
+   view. Static, no build step, no framework.
    ===================================================================== */
 
-const galleryEl = document.getElementById('employee-gallery');
-const detailEl  = document.getElementById('employee-detail');
+const galleryEl   = document.getElementById('employee-gallery');
+const detailEl    = document.getElementById('employee-detail');
 const galleryWrap = document.getElementById('gallery-wrap');
 
 /* ---------- Build the gallery cards ---------- */
@@ -17,7 +17,7 @@ function renderGallery() {
       <h3>${e.name}</h3>
       <p class="emp-does">${e.does}</p>
       <div class="emp-meet">
-        <span class="btn-ghost">Meet ${e.name} <span class="arrow">&rarr;</span></span>
+        <span class="btn-ghost">Get the prompt <span class="arrow">&rarr;</span></span>
       </div>
     </article>
   `).join('');
@@ -33,6 +33,12 @@ function renderGallery() {
 
 /* ---------- Build a single detail view ---------- */
 function renderDetail(emp) {
+  const tryItBlock = emp.tryIt ? `
+    <div class="try-it-box">
+      <div class="try-it-label">TRY IT</div>
+      <div class="try-it-text">${escapeHtml(emp.tryIt)}</div>
+    </div>` : '';
+
   detailEl.innerHTML = `
     <a class="back-link" href="#"><span>&larr;</span> All AI Employees</a>
 
@@ -50,10 +56,11 @@ function renderDetail(emp) {
         <div class="detail-panel">
           <h4>The ready-to-paste prompt</h4>
           <div class="prompt-box">
-            <span class="prompt-label">Copy &amp; paste into ChatGPT, Claude, or Gemini</span>
-            <button class="copy-button" type="button">Copy</button>
+            <span class="prompt-label">Copy &amp; paste into Claude, ChatGPT, or Gemini</span>
+            <button class="copy-button" type="button">Copy Prompt</button>
             <div class="prompt-text">${escapeHtml(emp.prompt)}</div>
           </div>
+          ${tryItBlock}
           <div class="fid-note">
             <div class="t">You stay the fiduciary.</div>
             <p>${emp.fiduciary}</p>
@@ -78,27 +85,33 @@ function renderDetail(emp) {
     </div>
   `;
 
-  // Copy button
+  /* Copy button */
   const btn = detailEl.querySelector('.copy-button');
   btn.addEventListener('click', () => {
     navigator.clipboard.writeText(emp.prompt).then(() => {
       btn.textContent = 'Copied!';
       btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1900);
+      setTimeout(() => { btn.textContent = 'Copy Prompt'; btn.classList.remove('copied'); }, 1900);
     }).catch(() => {
-      // Fallback for older browsers / file:// edge cases
       const ta = document.createElement('textarea');
-      ta.value = emp.prompt; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); btn.textContent = 'Copied!'; btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1900); }
-      finally { document.body.removeChild(ta); }
+      ta.value = emp.prompt;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy Prompt'; btn.classList.remove('copied'); }, 1900);
+      } finally {
+        document.body.removeChild(ta);
+      }
     });
   });
 }
 
 /* ---------- Router ---------- */
 function route() {
-  const id = location.hash.replace('#', '');
+  const id  = location.hash.replace('#', '');
   const emp = EMPLOYEES.find((e) => e.id === id);
 
   if (emp) {
