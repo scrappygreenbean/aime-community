@@ -4,7 +4,8 @@ Thumbs.db
 desktop.ini
 
 # Local tooling (not needed to serve the site)
-.claude/
+.claude/*
+!.claude/skills/
 
 # Dependencies (this site has none, but just in case)
 node_modules/
