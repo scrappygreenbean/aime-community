@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#1f6f52">
+<title>Rounds</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one-screen phone app. Sticky header, scrolling list, bottom tab bar. Tap targets 44px+. */
+:root{
+  --bg:#f6f7f5; --panel:#ffffff; --fg:#17201b; --muted:#5f6b64; --line:#dde3df;
+  --accent:#1f6f52; --accent-fg:#ffffff; --accent-soft:#e3f1ea;
+  --good:#1f6f52; --warn:#9a6a27; --bad:#a93a2e; --warn-soft:#f6ecd9; --bad-soft:#f7e3e0;
+  --display:'Fraunces',Georgia,serif; --body:'Figtree',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1512; --panel:#182019; --fg:#eef2ee; --muted:#9aa89f; --line:#2a3530;
+  --accent:#5cc396; --accent-fg:#0b1a12; --accent-soft:#1a3328;
+  --good:#5cc396; --warn:#e0b05a; --bad:#f08a7c; --warn-soft:#352a14; --bad-soft:#3a1d19; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1512; --panel:#182019; --fg:#eef2ee; --muted:#9aa89f; --line:#2a3530;
+  --accent:#5cc396; --accent-fg:#0b1a12; --accent-soft:#1a3328;
+  --good:#5cc396; --warn:#e0b05a; --bad:#f08a7c; --warn-soft:#352a14; --bad-soft:#3a1d19; color-scheme:dark }
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 var(--body);display:flex;flex-direction:column;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+h1,h2,h3{margin:0;text-wrap:balance}
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hdr h1{font:600 26px/1.1 var(--display);letter-spacing:-.01em}
+.hdr .sub{font-size:13px;color:var(--muted)}
+main{flex:1;overflow-y:auto;padding-block:14px 90px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;background:var(--panel);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
+.tabs button{flex:1;background:none;border:0;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted)}
+.tabs button[aria-selected="true"]{color:var(--accent)}
+.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 14px;font-weight:600;min-height:44px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.sm{min-height:36px;padding:6px 10px;font-size:14px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.search{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-bottom:12px}
+.day{font:600 13px var(--body);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;min-width:0}
+.card.done{opacity:.6}
+.time{font-variant-numeric:tabular-nums;font-weight:700;min-width:62px;line-height:1.2}
+.time small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.body{min-width:0}
+.name{font-weight:700;font-size:17px}
+.meta{color:var(--muted);font-size:14px;overflow-wrap:anywhere}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.check{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:none;display:grid;place-items:center;color:var(--accent-fg)}
+.check.on{background:var(--good);border-color:var(--good)}
+.check svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.plist .card{grid-template-columns:1fr auto;cursor:pointer}
+.empty{color:var(--muted);text-align:center;padding:40px 16px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font:600 24px/1 var(--display);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet[hidden]{display:none}
+.sheet>div{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow-y:auto;border-radius:18px 18px 0 0;
+  padding-block:14px calc(20px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet h2{font:600 22px var(--display);margin-bottom:12px}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+textarea{min-height:80px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:360px){.grid2{grid-template-columns:1fr}}
+.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.actions .btn{flex:1}
+.detail dt{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:12px}
+.detail dd{margin:2px 0 0;overflow-wrap:anywhere}
+.detail a{color:var(--accent);font-weight:600}
+.note{font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:999px;font-size:14px;font-weight:600;z-index:30;opacity:0;transition:opacity .2s}
+.toast.show{opacity:1}
+.lock{position:fixed;inset:0;z-index:40;background:var(--bg);display:grid;place-items:center;padding:16px}
+.lock[hidden]{display:none}
+.lock>div{text-align:center;max-width:320px;width:100%}
+.lock input{text-align:center;font-size:28px;letter-spacing:.4em;margin:14px 0}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+
+<div class="lock" id="lock" hidden><div>
+  <h1 style="font:600 30px var(--display)">Rounds</h1>
+  <p style="color:var(--muted)">Enter your PIN</p>
+  <input id="lockPin" type="password" inputmode="numeric" maxlength="6" autocomplete="off" aria-label="PIN">
+  <button class="btn primary" style="width:100%" id="lockGo">Open</button>
+  <p id="lockErr" style="color:var(--bad);font-size:14px;min-height:20px"></p>
+</div></div>
+
+<header class="hdr"><div><h1 id="title">Today</h1><div class="sub" id="subtitle"></div></div><button class="btn primary" id="addBtn">+ Add</button></header>
+<main id="main"></main>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="5"/></svg>Today</button>
+  <button role="tab" data-tab="schedule"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Schedule</button>
+  <button role="tab" data-tab="patients"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Patients</button>
+  <button role="tab" data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>Settings</button>
+</nav>
+
+<div class="sheet" id="sheet" hidden><div id="sheetBody"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const KEY='rounds.v1';
+const VISIT_TYPES=['Home visit','Med check','Wound care','Vitals','Labs draw','Post-op follow-up','Intake','Other'];
+const todayISO=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function sample(){
+  const t=todayISO(); const d=new Date(); d.setDate(d.getDate()+1); const tm=d.toISOString().slice(0,10);
+  const p1=uid(),p2=uid(),p3=uid();
+  return {sample:true,pin:'',patients:[
+    {id:p1,name:'Example: Dorothy Hale',dob:'1941-03-12',phone:'817-555-0142',address:'2210 Pecan Ridge Dr, Arlington, TX 76017',contact:'Son, Mark Hale 817-555-0199',cadence:'Twice weekly',notes:'CHF. Daily weights. Lives alone; dog is friendly.'},
+    {id:p2,name:'Example: Luis Carrillo',dob:'1958-09-30',phone:'682-555-0173',address:'1405 W Park Row Dr, Arlington, TX 76013',contact:'Wife, Ana 682-555-0174',cadence:'Weekly',notes:'Post-op knee. Wound check and PT compliance.'},
+    {id:p3,name:'Example: Betty Nguyen',dob:'1949-06-02',phone:'817-555-0128',address:'801 Oak Hollow Ln, Mansfield, TX 76063',contact:'Daughter, Linh 817-555-0129',cadence:'Every 2 weeks',notes:'Type 2 diabetes. Insulin log review.'}],
+  appts:[
+    {id:uid(),patientId:p1,date:t,time:'08:30',dur:45,type:'Vitals',notes:'Check edema, weight log',status:'done'},
+    {id:uid(),patientId:p2,date:t,time:'10:15',dur:60,type:'Wound care',notes:'Bring 4x4s and tape',status:'scheduled'},
+    {id:uid(),patientId:p3,date:t,time:'13:00',dur:30,type:'Med check',notes:'',status:'scheduled'},
+    {id:uid(),patientId:p1,date:tm,time:'09:00',dur:45,type:'Home visit',notes:'',status:'scheduled'}]};
+}
+let S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||!S.patients) S=sample();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('Could not save on this device')}}
+
+let tab='today', q='';
+const $=s=>document.querySelector(s);
+const main=$('#main');
+const pat=id=>S.patients.find(p=>p.id===id);
+const fmtTime=t=>{if(!t)return '';const[h,m]=t.split(':').map(Number);return((h%12)||12)+':'+String(m).padStart(2,'0')+(h<12?' am':' pm')};
+const fmtDate=iso=>{const[y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})};
+const mapUrl=a=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);
+const age=dob=>{if(!dob)return'';const b=new Date(dob),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a+' yrs'};
+
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1800)}
+
+function apptCard(a,showDate){
+  const p=pat(a.patientId)||{name:'(deleted patient)',address:''};
+  const late=a.status==='scheduled'&&a.date<todayISO();
+  return `<div class="card ${a.status==='done'?'done':''}" data-appt="${a.id}">
+    <div class="time">${fmtTime(a.time)}<small>${a.dur||''}${a.dur?' min':''}</small></div>
+    <div class="body">
+      <div class="name">${esc(p.name)}</div>
+      <div class="meta">${esc(a.type)}${a.notes?' · '+esc(a.notes):''}</div>
+      ${p.address?`<div class="meta"><a href="${mapUrl(p.address)}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600">📍 ${esc(p.address)}</a></div>`:''}
+      ${late?'<span class="pill bad">Missed</span>':''}${a.status==='missed'?'<span class="pill bad">Missed</span>':''}
+    </div>
+    <button class="check ${a.status==='done'?'on':''}" data-done="${a.id}" aria-label="Mark done"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></button>
+  </div>`;
+}
+
+function render(){
+  document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===tab));
+  const t=todayISO();
+  $('#addBtn').textContent = tab==='patients' ? '+ Patient' : '+ Visit';
+  $('#addBtn').hidden = tab==='settings';
+  if(tab==='today'){
+    $('#title').textContent='Today'; $('#subtitle').textContent=fmtDate(t);
+    const list=S.appts.filter(a=>a.date===t).sort((a,b)=>a.time.localeCompare(b.time));
+    const done=list.filter(a=>a.status==='done').length;
+    const overdue=S.appts.filter(a=>a.date<t&&a.status==='scheduled');
+    main.innerHTML=`<div class="stats"><div class="stat"><b>${list.length}</b><span>visits today</span></div><div class="stat"><b>${done}</b><span>done</span></div><div class="stat"><b>${list.length-done}</b><span>left</span></div></div>
+      ${S.sample?'<div class="note">These are example patients so you can see how it works. Settings → Clear examples when you are ready to add your own.</div>':''}
+      ${overdue.length?`<div class="day">Not marked from earlier days</div>${overdue.map(a=>apptCard(a)).join('')}`:''}
+      <div class="day">Schedule</div>
+      ${list.length?list.map(a=>apptCard(a)).join(''):'<div class="empty">No visits today.<br>Tap + Visit to add one.</div>'}`;
+  }
+  if(tab==='schedule'){
+    $('#title').textContent='Schedule'; $('#subtitle').textContent='Upcoming visits';
+    const list=S.appts.filter(a=>a.date>=t).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+    const days={}; list.forEach(a=>(days[a.date]=days[a.date]||[]).push(a));
+    main.innerHTML=Object.keys(days).map(d=>`<div class="day">${d===t?'Today · ':''}${fmtDate(d)}</div>${days[d].map(a=>apptCard(a)).join('')}`).join('')||'<div class="empty">Nothing scheduled yet.</div>';
+  }
+  if(tab==='patients'){
+    $('#title').textContent='Patients'; $('#subtitle').textContent=S.patients.length+' on your list';
+    const list=S.patients.filter(p=>!q||(p.name+' '+p.address+' '+p.phone).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+    main.innerHTML=`<input class="search" id="q" type="search" placeholder="Search name, address, phone" value="${esc(q)}">
+      <div class="plist">${list.map(p=>{const next=S.appts.filter(a=>a.patientId===p.id&&a.status==='scheduled'&&a.date>=t).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];
+        return `<div class="card" data-patient="${p.id}"><div class="body"><div class="name">${esc(p.name)}</div><div class="meta">${esc(p.address)}</div><div class="meta">${next?'Next: '+fmtDate(next.date)+' '+fmtTime(next.time):'No visit scheduled'}</div></div><span class="pill">${esc(p.cadence||'')}</span></div>`}).join('')||'<div class="empty">No patients match.</div>'}</div>`;
+    const qi=$('#q'); qi.oninput=e=>{q=e.target.value.toLowerCase();const pos=qi.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(pos,pos)};
+  }
+  if(tab==='settings'){
+    $('#title').textContent='Settings'; $('#subtitle').textContent='Backup and privacy';
+    main.innerHTML=`<div class="note">Your patient list lives only on this phone. Nothing is sent anywhere. Back it up now and then, and keep the backup somewhere private.</div>
+      <label>PIN lock (4 to 6 digits, blank for none)</label><input id="pin" inputmode="numeric" maxlength="6" value="${esc(S.pin||'')}" autocomplete="off">
+      <div class="actions"><button class="btn primary" id="savePin">Save PIN</button></div>
+      <label>Backup</label>
+      <div class="actions"><button class="btn" id="copyBk">Copy backup text</button><button class="btn" id="restoreBk">Restore from text</button></div>
+      <label>Examples</label>
+      <div class="actions">${S.sample?'<button class="btn" id="clearSample">Clear example patients</button>':'<span class="meta">Example data has been cleared.</span>'}</div>
+      <label>Danger zone</label>
+      <div class="actions"><button class="btn danger" id="wipe">Erase everything on this device</button></div>`;
+    $('#savePin').onclick=()=>{const v=$('#pin').value.trim();if(v&&!/^\d{4,6}$/.test(v))return toast('PIN must be 4 to 6 digits');S.pin=v;save();toast(v?'PIN set':'PIN removed')};
+    $('#copyBk').onclick=()=>{const txt=JSON.stringify(S);const ok=()=>toast('Backup copied. Paste it somewhere safe.');
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(()=>showBackupText(txt))}else showBackupText(txt)};
+    $('#restoreBk').onclick=()=>openSheet(`<h2>Restore backup</h2><label>Paste backup text</label><textarea id="bkIn"></textarea><div class="actions"><button class="btn" data-close>Cancel</button><button class="btn primary" id="bkGo">Restore</button></div>`,()=>{
+      $('#bkGo').onclick=()=>{try{const o=JSON.parse($('#bkIn').value);if(!o.patients||!o.appts)throw 0;S=o;save();closeSheet();tab='today';render();toast('Restored')}catch(e){toast('That does not look like a Rounds backup')}}});
+    if($('#clearSample'))$('#clearSample').onclick=()=>{S.patients=[];S.appts=[];S.sample=false;save();render();toast('Examples cleared')};
+    $('#wipe').onclick=()=>openSheet(`<h2>Erase everything?</h2><p>Every patient and visit on this device will be deleted. This cannot be undone.</p><div class="actions"><button class="btn" data-close>Keep my data</button><button class="btn danger" id="wipeGo">Erase</button></div>`,()=>{$('#wipeGo').onclick=()=>{S={sample:false,pin:'',patients:[],appts:[]};save();closeSheet();render();toast('Erased')}});
+  }
+}
+function showBackupText(txt){openSheet(`<h2>Backup text</h2><p class="meta">Select all and copy this into a note.</p><textarea id="bkOut" style="min-height:160px">${esc(txt)}</textarea><div class="actions"><button class="btn primary" data-close>Done</button></div>`,()=>{$('#bkOut').select()})}
+
+function openSheet(html,after){const s=$('#sheet');$('#sheetBody').innerHTML=html;s.hidden=false;s.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheet);after&&after()}
+function closeSheet(){$('#sheet').hidden=true}
+$('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+
+function patientOptions(sel){return S.patients.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}" ${p.id===sel?'selected':''}>${esc(p.name)}</option>`).join('')}
+
+function apptForm(a){
+  a=a||{patientId:S.patients[0]&&S.patients[0].id,date:todayISO(),time:'09:00',dur:45,type:'Home visit',notes:'',status:'scheduled'};
+  if(!S.patients.length)return openSheet(`<h2>Add a patient first</h2><p>Visits are tied to a patient. Add one, then schedule.</p><div class="actions"><button class="btn" data-close>Close</button><button class="btn primary" id="goP">Add patient</button></div>`,()=>{$('#goP').onclick=()=>patientForm()});
+  openSheet(`<h2>${a.id?'Edit visit':'New visit'}</h2>
+    <label>Patient</label><select id="f_p">${patientOptions(a.patientId)}</select>
+    <div class="grid2"><div><label>Date</label><input id="f_d" type="date" value="${a.date}"></div><div><label>Time</label><input id="f_t" type="time" value="${a.time}"></div></div>
+    <div class="grid2"><div><label>Type</label><select id="f_ty">${VISIT_TYPES.map(v=>`<option ${v===a.type?'selected':''}>${v}</option>`).join('')}</select></div><div><label>Length (min)</label><input id="f_du" type="number" min="5" step="5" value="${a.dur}"></div></div>
+    <label>Notes / what to bring</label><textarea id="f_n">${esc(a.notes)}</textarea>
+    ${a.id?`<label>Status</label><select id="f_s">${['scheduled','done','missed'].map(s=>`<option ${s===a.status?'selected':''}>${s}</option>`).join('')}</select>`:''}
+    <div class="actions">${a.id?'<button class="btn danger" id="f_del">Delete</button>':''}<button class="btn" data-close>Cancel</button><button class="btn primary" id="f_save">Save</button></div>`,()=>{
+    $('#f_save').onclick=()=>{const d=$('#f_d').value,t=$('#f_t').value;if(!d||!t)return toast('Date and time are required');
+      const o={id:a.id||uid(),patientId:$('#f_p').value,date:d,time:t,dur:+$('#f_du').value||0,type:$('#f_ty').value,notes:$('#f_n').value.trim(),status:a.id?$('#f_s').value:'scheduled'};
+      const i=S.appts.findIndex(x=>x.id===o.id);i>=0?S.appts[i]=o:S.appts.push(o);save();closeSheet();render();toast('Saved')};
+    if($('#f_del'))$('#f_del').onclick=()=>{S.appts=S.appts.filter(x=>x.id!==a.id);save();closeSheet();render();toast('Visit deleted')};
+  });
+}
+function patientForm(p){
+  p=p||{name:'',dob:'',phone:'',address:'',contact:'',cadence:'Weekly',notes:''};
+  openSheet(`<h2>${p.id?'Edit patient':'New patient'}</h2>
+    <label>Full name</label><input id="p_n" value="${esc(p.name)}" autocomplete="off">
+    <div class="grid2"><div><label>Date of birth</label><input id="p_dob" type="date" value="${p.dob}"></div><div><label>Phone</label><input id="p_ph" type="tel" value="${esc(p.phone)}"></div></div>
+    <label>Address</label><input id="p_a" value="${esc(p.address)}" autocomplete="off">
+    <label>Emergency contact</label><input id="p_c" value="${esc(p.contact)}" autocomplete="off">
+    <label>Visit cadence</label><select id="p_cad">${['Daily','Twice weekly','Weekly','Every 2 weeks','Monthly','As needed'].map(v=>`<option ${v===p.cadence?'selected':''}>${v}</option>`).join('')}</select>
+    <label>Care notes</label><textarea id="p_no">${esc(p.notes)}</textarea>
+    <div class="actions">${p.id?'<button class="btn danger" id="p_del">Delete</button>':''}<button class="btn" data-close>Cancel</button><button class="btn primary" id="p_save">Save</button></div>`,()=>{
+    $('#p_save').onclick=()=>{const n=$('#p_n').value.trim();if(!n)return toast('Name is required');
+      const o={id:p.id||uid(),name:n,dob:$('#p_dob').value,phone:$('#p_ph').value.trim(),address:$('#p_a').value.trim(),contact:$('#p_c').value.trim(),cadence:$('#p_cad').value,notes:$('#p_no').value.trim()};
+      const i=S.patients.findIndex(x=>x.id===o.id);i>=0?S.patients[i]=o:S.patients.push(o);save();closeSheet();tab='patients';render();toast('Saved')};
+    if($('#p_del'))$('#p_del').onclick=()=>openSheet(`<h2>Delete ${esc(p.name)}?</h2><p>Their visits will be deleted too.</p><div class="actions"><button class="btn" data-close>Keep</button><button class="btn danger" id="p_delGo">Delete</button></div>`,()=>{$('#p_delGo').onclick=()=>{S.patients=S.patients.filter(x=>x.id!==p.id);S.appts=S.appts.filter(x=>x.patientId!==p.id);save();closeSheet();render();toast('Patient deleted')}});
+  });
+}
+function patientDetail(p){
+  const t=todayISO();const vis=S.appts.filter(a=>a.patientId===p.id).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  openSheet(`<h2>${esc(p.name)}</h2><dl class="detail">
+    <dt>Born</dt><dd>${p.dob?esc(p.dob)+' · '+age(p.dob):'—'}</dd>
+    <dt>Phone</dt><dd>${p.phone?`${esc(p.phone)} <button class="btn sm" data-copy="${esc(p.phone)}">Copy</button>`:'—'}</dd>
+    <dt>Address</dt><dd>${p.address?`${esc(p.address)}<br><a href="${mapUrl(p.address)}" target="_blank" rel="noopener">Open in Maps</a> · <button class="btn sm" data-copy="${esc(p.address)}">Copy</button>`:'—'}</dd>
+    <dt>Emergency contact</dt><dd>${esc(p.contact)||'—'}</dd>
+    <dt>Cadence</dt><dd>${esc(p.cadence)||'—'}</dd>
+    <dt>Care notes</dt><dd>${esc(p.notes)||'—'}</dd>
+    <dt>Visits</dt><dd>${vis.length?vis.slice(0,8).map(a=>`<div>${fmtDate(a.date)} ${fmtTime(a.time)} · ${esc(a.type)} <span class="pill ${a.status==='done'?'':a.status==='missed'||a.date<t?'bad':'warn'}">${a.status==='scheduled'&&a.date<t?'not marked':a.status}</span></div>`).join(''):'None yet'}</dd></dl>
+    <div class="actions"><button class="btn" data-close>Close</button><button class="btn" id="pd_edit">Edit</button><button class="btn primary" id="pd_visit">Schedule visit</button></div>`,()=>{
+    $('#pd_edit').onclick=()=>patientForm(p);
+    $('#pd_visit').onclick=()=>apptForm({patientId:p.id,date:t,time:'09:00',dur:45,type:'Home visit',notes:'',status:'scheduled'});
+    document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{const v=b.dataset.copy;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(()=>toast('Copied')).catch(()=>toast('Press and hold the text to copy'));else toast('Press and hold the text to copy')});
+  });
+}
+
+main.addEventListener('click',e=>{
+  const d=e.target.closest('[data-done]');if(d){const a=S.appts.find(x=>x.id===d.dataset.done);a.status=a.status==='done'?'scheduled':'done';save();render();return}
+  if(e.target.closest('a'))return;
+  const c=e.target.closest('[data-appt]');if(c){apptForm(S.appts.find(x=>x.id===c.dataset.appt));return}
+  const p=e.target.closest('[data-patient]');if(p)patientDetail(pat(p.dataset.patient));
+});
+$('#addBtn').onclick=()=>tab==='patients'?patientForm():apptForm();
+document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();main.scrollTop=0});
+
+// PIN lock
+if(S.pin){const L=$('#lock');L.hidden=false;const go=()=>{if($('#lockPin').value===S.pin){L.hidden=true;$('#lockPin').value=''}else{$('#lockErr').textContent='Wrong PIN';$('#lockPin').value=''}};$('#lockGo').onclick=go;$('#lockPin').onkeydown=e=>{if(e.key==='Enter')go()};$('#lockPin').focus()}
+render();
+})();
+</script>
